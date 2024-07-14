@@ -1,0 +1,188 @@
+<html lang="zh-CN"><head><meta charset="UTF-8"><style>.nodata  main {width:1000px;margin: auto;}</style></head><body class="nodata " style=""><div class="main_father clearfix d-flex justify-content-center " style="height:100%;"> <div class="container clearfix " id="mainBox"><main><div class="blog-content-box">
+<div class="article-header-box">
+<div class="article-header">
+<div class="article-title-box">
+<h1 class="title-article" id="articleContentId">《无人驾驶车辆模型预测控制》（第二版）第四章详细学习——算法部分</h1>
+</div>
+
+</div>
+</div>
+<div id="blogHuaweiyunAdvert"></div>
+<article class="baidu_pl">
+<div class="article_content clearfix" id="article_content">
+<link href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/kdoc_html_views-1a98987dfd.css" rel="stylesheet"/>
+<link href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-044f2cf1dc.css" rel="stylesheet"/>
+<div class="htmledit_views" id="content_views">
+<p id="main-toc"><strong>目录</strong></p>
+<p id="%E2%91%A0%E5%89%8D%E8%A8%80-toc" style="margin-left:40px;"><a href="#%E2%91%A0%E5%89%8D%E8%A8%80" rel="nofollow">①前言</a></p>
+<p id="%E2%91%A1%E8%BD%A6%E8%BE%86%E7%9A%84%E8%BF%90%E5%8A%A8%E5%AD%A6%E6%96%B9%E7%A8%8B-toc" style="margin-left:40px;"><a href="#%E2%91%A1%E8%BD%A6%E8%BE%86%E7%9A%84%E8%BF%90%E5%8A%A8%E5%AD%A6%E6%96%B9%E7%A8%8B" rel="nofollow">②车辆的运动学方程</a></p>
+<p id="%E2%91%A2%E7%BA%BF%E6%80%A7%E5%8C%96%E8%BF%87%E7%A8%8B-toc" style="margin-left:40px;"><a href="#%E2%91%A2%E7%BA%BF%E6%80%A7%E5%8C%96%E8%BF%87%E7%A8%8B" rel="nofollow">③线性化过程</a></p>
+<p id="%E2%91%A3%E7%A6%BB%E6%95%A3%E5%8C%96-toc" style="margin-left:40px;"><a href="#%E2%91%A3%E7%A6%BB%E6%95%A3%E5%8C%96" rel="nofollow">④离散化</a></p>
+<p id="%C2%A0%E2%91%A4%E6%8E%A8%E5%AF%BC%E4%B8%8B%E4%B8%80%E6%97%B6%E5%88%BB%E7%8A%B6%E6%80%81-toc" style="margin-left:40px;"><a href="#%C2%A0%E2%91%A4%E6%8E%A8%E5%AF%BC%E4%B8%8B%E4%B8%80%E6%97%B6%E5%88%BB%E7%8A%B6%E6%80%81" rel="nofollow"> ⑤推导下一时刻状态</a></p>
+<p id="%E2%91%A5%E8%BF%AD%E4%BB%A3%E6%8E%A8%E5%AF%BC-toc" style="margin-left:40px;"><a href="#%E2%91%A5%E8%BF%AD%E4%BB%A3%E6%8E%A8%E5%AF%BC" rel="nofollow">⑥迭代推导</a></p>
+<p id="%E2%91%A6%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0%E4%BC%98%E5%8C%96-toc" style="margin-left:40px;"><a href="#%E2%91%A6%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0%E4%BC%98%E5%8C%96" rel="nofollow">⑦目标函数优化</a></p>
+<p id="%E2%91%A7%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B6-toc" style="margin-left:40px;"><a href="#%E2%91%A7%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B6" rel="nofollow">⑧约束条件</a></p>
+<p id="%E2%91%A8%E4%B8%8A%E4%B8%8B%E9%99%90%E7%BA%A6%E6%9D%9F-toc" style="margin-left:40px;"><a href="#%E2%91%A8%E4%B8%8A%E4%B8%8B%E9%99%90%E7%BA%A6%E6%9D%9F" rel="nofollow">⑨上下限约束</a></p>
+<p id="%E2%91%A9%E5%AD%A6%E4%B9%A0%E9%81%97%E7%95%99%E9%97%AE%E9%A2%98%C2%A0-toc" style="margin-left:40px;"><a href="#%E2%91%A9%E5%AD%A6%E4%B9%A0%E9%81%97%E7%95%99%E9%97%AE%E9%A2%98%C2%A0" rel="nofollow">⑩学习遗留问题</a></p>
+<hr/>
+<h3 id="%E2%91%A0%E5%89%8D%E8%A8%80"><em><strong>①前言</strong></em></h3>
+<p>本文主要参考了下面的博客<img alt="" height="15" src="https://img-blog.csdnimg.cn/fafffb6067a44452aba9db86195fa302.png" width="15"><img alt="" height="15" src="https://img-blog.csdnimg.cn/446207c4f6154a8e91a38cad7e3ae686.png" width="15"><img alt="" height="15" src="https://img-blog.csdnimg.cn/fa41faafe8a342ceaebd47cb7e5c5d1f.png" width="15"><a class="has-card" href="https://blog.csdn.net/m0_50888394/article/details/115556185" title="线性时变模型预测控制推导_Jeossirey的博客-CSDN博客_线性时变系统的模型预测控制"><span class="link-card-box"><span class="link-title">线性时变模型预测控制推导_Jeossirey的博客-CSDN博客_线性时变系统的模型预测控制</span><span class="link-desc">以自行车模型为例，在推导过程中下角标 r （reference）,即参考的意思。</span><span class="link-link"><img alt="" class="link-link-icon" src="https://g.csdnimg.cn/static/logo/favicon32.ico">https://blog.csdn.net/m0_50888394/article/details/115556185</img></span></span></a></img></img></img></p>
+<p>以及：龚建伟等.《无人驾驶车辆模型预测控制》（第2版） </p>
+<p>同时对自己在代码实现时需要用到的推导细节给出了更加详细的说明，以帮助自己更好的理解~算是自己学习过程的记录。好了，下面就正式开始吧！</p>
+<p>模型预测控制的核心是通过建立基于状态量的误差量的状态空间方程来推导。第四章通过车辆的运动学方程，采用了非线性系统线性化方法中的第一种：存在参考系统的线性化方法。</p>
+<h3 id="%E2%91%A1%E8%BD%A6%E8%BE%86%E7%9A%84%E8%BF%90%E5%8A%A8%E5%AD%A6%E6%96%B9%E7%A8%8B"><em><strong>②车辆的运动学方程</strong></em></h3>
+<p>车辆的运动学方程推导过程略，结果如下：</p>
+<p><img alt="" height="182" src="https://img-blog.csdnimg.cn/58cc256dd9d549fe9ad7bc2df002164b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="720"/></p>
+<p>即：</p>
+<p style="text-align:center;"><img alt="\dot{\chi }=f(\chi ,u)" class="mathcode" src="https://latex.csdn.net/eq?%5Cdot%7B%5Cchi%20%7D%3Df%28%5Cchi%20%2Cu%29"> ·····························（<strong>1.2</strong>）</img></p>
+<p style="text-align:center;"><img alt="f_{1}=\dot{\chi }_{1}=f_{1}(\chi ,u)" class="mathcode" src="https://latex.csdn.net/eq?f_%7B1%7D%3D%5Cdot%7B%5Cchi%20%7D_%7B1%7D%3Df_%7B1%7D%28%5Cchi%20%2Cu%29"/></p>
+<p style="text-align:center;"><img alt="f_{2}=\dot{\chi }_{2}=f_{2}(\chi ,u)" class="mathcode" src="https://latex.csdn.net/eq?f_%7B2%7D%3D%5Cdot%7B%5Cchi%20%7D_%7B2%7D%3Df_%7B2%7D%28%5Cchi%20%2Cu%29"/></p>
+<p style="text-align:center;"><img alt="f_{3}=\dot{\chi }_{3}=f_{3}(\chi ,u)" class="mathcode" src="https://latex.csdn.net/eq?f_%7B3%7D%3D%5Cdot%7B%5Cchi%20%7D_%7B3%7D%3Df_%7B3%7D%28%5Cchi%20%2Cu%29"/></p>
+<p>选取系统的状态量为<img alt="\chi =[x,y,\varphi ]^{T}" class="mathcode" src="https://latex.csdn.net/eq?%5Cchi%20%3D%5Bx%2Cy%2C%5Cvarphi%20%5D%5E%7BT%7D"/>,控制量<img alt="u=[v,\delta ]^{T}" class="mathcode" src="https://latex.csdn.net/eq?u%3D%5Bv%2C%5Cdelta%20%5D%5E%7BT%7D"/></p>
+<p>主要思想：假设参考轨迹给定，且参考轨迹在任意时刻其状态量和控制量均满足：</p>
+<p style="text-align:center;"><img alt="\dot{\chi }_{r}=f(\chi_{r} ,u_{r})" class="mathcode" src="https://latex.csdn.net/eq?%5Cdot%7B%5Cchi%20%7D_%7Br%7D%3Df%28%5Cchi_%7Br%7D%20%2Cu_%7Br%7D%29"/>·····························（<strong>1.3</strong>）</p>
+<p>其中，<img alt="\chi_{r} =[x_{r},y_{r},\varphi _{r}]^{T}" class="mathcode" src="https://latex.csdn.net/eq?%5Cchi_%7Br%7D%20%3D%5Bx_%7Br%7D%2Cy_%7Br%7D%2C%5Cvarphi%20_%7Br%7D%5D%5E%7BT%7D"/>，<img alt="u_{r}=[v_{r},\delta_{r} ]^{T}" class="mathcode" src="https://latex.csdn.net/eq?u_%7Br%7D%3D%5Bv_%7Br%7D%2C%5Cdelta_%7Br%7D%20%5D%5E%7BT%7D"/>。</p>
+<blockquote>
+<p><em><span style="color:#4da8ee;"><strong>ps①: 1.<img alt="f" class="mathcode" src="https://latex.csdn.net/eq?f"/>是状态转移函数，就理解为数学中表示函数的符号就可以了；</strong></span></em></p>
+<p><em><span style="color:#4da8ee;"><strong>          2. <img alt="(x,y)" class="mathcode" src="https://latex.csdn.net/eq?%28x%2Cy%29"/>为车辆后轴中心坐标，<img alt="\varphi" class="mathcode" src="https://latex.csdn.net/eq?%5Cvarphi"/>为车辆的航向角，<img alt="\delta" class="mathcode" src="https://latex.csdn.net/eq?%5Cdelta"/>为前轮偏角，<img alt="v" class="mathcode" src="https://latex.csdn.net/eq?v"/>为车辆后轴中心            的速度；</strong></span></em></p>
+<p><em><span style="color:#4da8ee;"><strong>          3.在该车辆模型中，状态量个数是3个，用<img alt="N_{x}=3" class="mathcode" src="https://latex.csdn.net/eq?N_%7Bx%7D%3D3"/>表示；控制量个数是2个，用                     <img alt="N_{u}=2" class="mathcode" src="https://latex.csdn.net/eq?N_%7Bu%7D%3D2"/>表示，在之后的推导过程的说明中，就直接用<img alt="N_{x},N_{u}" class="mathcode" src="https://latex.csdn.net/eq?N_%7Bx%7D%2CN_%7Bu%7D"/>来表示~~~</strong></span></em></p>
+</blockquote>
+<h3 id="%E2%91%A2%E7%BA%BF%E6%80%A7%E5%8C%96%E8%BF%87%E7%A8%8B"><em><strong>③线性化过程</strong></em></h3>
+<p>上面的运动学方程<img alt="\dot{\chi }=f(\chi ,u)" class="mathcode" src="https://latex.csdn.net/eq?%5Cdot%7B%5Cchi%20%7D%3Df%28%5Cchi%20%2Cu%29"/>是非线性的，所以需要对其进行线性化。对<img alt="\dot{\chi }=f(\chi ,u)" class="mathcode" src="https://latex.csdn.net/eq?%5Cdot%7B%5Cchi%20%7D%3Df%28%5Cchi%20%2Cu%29"/>在参考轨迹点采用泰勒级数展开并忽略高阶项，只保留一阶项：</p>
+<p><img alt="" height="136" src="https://img-blog.csdnimg.cn/9dc191df1e3a4e8e861deb641586ca7d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="722"/></p>
+<p>将（1.4）式减去（1.3）式，得：</p>
+<p><img alt="" height="133" src="https://img-blog.csdnimg.cn/8900cb69e7894a9cb6ed3a71cb31c74e.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="659"/></p>
+<p>记：<img alt="\dot{\tilde{\chi }}=\dot{\chi }-\dot{\chi _{r}}" class="mathcode" src="https://latex.csdn.net/eq?%5Cdot%7B%5Ctilde%7B%5Cchi%20%7D%7D%3D%5Cdot%7B%5Cchi%20%7D-%5Cdot%7B%5Cchi%20_%7Br%7D%7D"/> ， <img alt="\tilde{\chi }=\chi -\chi _{r}" class="mathcode" src="https://latex.csdn.net/eq?%5Ctilde%7B%5Cchi%20%7D%3D%5Cchi%20-%5Cchi%20_%7Br%7D"/> ，<img alt="\tilde{u}=u-u_{r}" class="mathcode" src="https://latex.csdn.net/eq?%5Ctilde%7Bu%7D%3Du-u_%7Br%7D"/> 。</p>
+<blockquote>
+<p><span style="color:#4da8ee;"><em><strong>ps②:  <img alt="\dot{\tilde{\chi }}" class="mathcode" src="https://latex.csdn.net/eq?%5Cdot%7B%5Ctilde%7B%5Cchi%20%7D%7D"/>、<img alt="\tilde{\chi }" class="mathcode" src="https://latex.csdn.net/eq?%5Ctilde%7B%5Cchi%20%7D"/>、<img alt="\dot{\chi _{r}}" class="mathcode" src="https://latex.csdn.net/eq?%5Cdot%7B%5Cchi%20_%7Br%7D%7D"/>矩阵的大小均为：<img alt="(N_{x},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D%2C1%29"/> ，<img alt="\tilde{u}" class="mathcode" src="https://latex.csdn.net/eq?%5Ctilde%7Bu%7D"/>、<img alt="u" class="mathcode" src="https://latex.csdn.net/eq?u"/>、<img alt="u_{r}" class="mathcode" src="https://latex.csdn.net/eq?u_%7Br%7D"/>矩阵的大小均为：<img alt="(N_{u},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bu%7D%2C1%29"/> 。</strong></em></span></p>
+</blockquote>
+<p>因此上式可以写成： </p>
+<p class="img-center"><img alt="" height="151" src="https://img-blog.csdnimg.cn/11f29753d556424080f1c54fc5ad44b0.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_19,color_FFFFFF,t_70,g_se,x_16" width="668"/></p>
+<p>其中：</p>
+<p><img alt="" height="229" src="https://img-blog.csdnimg.cn/a1acb35909ad496d9fe075faf97ebaac.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="679"/></p>
+<p><img alt="" height="229" src="https://img-blog.csdnimg.cn/74f0f37fbba44b678b822cc37b393472.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="682"/></p>
+<blockquote>
+<p><em><span style="color:#4da8ee;"><strong>ps③:此运动学模型因为较为简单，故其雅克比矩阵手算其实更为方便，但当遇到比较复杂            的动力学模型时，需借助matlab进行求解，具体可见《无人驾驶车辆模型预测控制》            </strong></span></em><em><span style="color:#4da8ee;"><strong>第五章—&gt; 。</strong></span></em></p>
+</blockquote>
+<p>因而线性化后的模型可以写成： </p>
+<p><img alt="" height="232" src="https://img-blog.csdnimg.cn/2bab52385ac44e3ba84ade1bc521cb56.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="758"/></p>
+<h3 id="%E2%91%A3%E7%A6%BB%E6%95%A3%E5%8C%96"><em>④离散化</em></h3>
+<p>对上式采用向前欧拉法进行离散化：</p>
+<p><img alt="" class="right" height="83" src="https://img-blog.csdnimg.cn/dad5bbd45db545eebbea941dd62118e4.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_17,color_FFFFFF,t_70,g_se,x_16" width="560"/></p>
+<p>其中，<img alt="T" class="mathcode" src="https://latex.csdn.net/eq?T"/>为系统采样时间。</p>
+<p>然后得：</p>
+<p><img alt="" height="245" src="https://img-blog.csdnimg.cn/b215610721404ddb8913281a0a22ce90.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="680"/></p>
+<blockquote>
+<p><em><span style="color:#4da8ee;"> <strong>ps④:<img alt="a" class="mathcode" src="https://latex.csdn.net/eq?a"/>矩阵的大小：<img alt="(N_{x},N_{x})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D%2CN_%7Bx%7D%29"/> ；<img alt="b" class="mathcode" src="https://latex.csdn.net/eq?b"/>矩阵的大小：<img alt="(N_{x},N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D%2CN_%7Bu%7D%29"/> 。</strong></span></em></p>
+</blockquote>
+<p><strong>接下来构造一个新的状态量（</strong>把原来的<strong>状态量偏差</strong>和<strong>控制量偏差</strong>整合到一起<strong>）：</strong></p>
+<p class="img-center"><img alt="" height="90" src="https://img-blog.csdnimg.cn/4d5c8443b7904b53aa0a3397c83c3647.png" width="274"/></p>
+<blockquote>
+<p><span style="color:#4da8ee;"><em><strong>ps⑤:新构造的状态量 <img alt="\xi" class="mathcode" src="https://latex.csdn.net/eq?%5Cxi"/>矩阵的大小为：<img alt="(N_{x},N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D%2CN_%7Bu%7D%29"/> ；<img alt="N_{x},N_{u}" class="mathcode" src="https://latex.csdn.net/eq?N_%7Bx%7D%2CN_%7Bu%7D"/>分别是状态量个数和控制量个             数。</strong></em></span></p>
+</blockquote>
+<h3 id="%C2%A0%E2%91%A4%E6%8E%A8%E5%AF%BC%E4%B8%8B%E4%B8%80%E6%97%B6%E5%88%BB%E7%8A%B6%E6%80%81"> <em>⑤推导下一时刻状态</em></h3>
+<p><img alt="" height="272" src="https://img-blog.csdnimg.cn/673e2cdaae3e43f9b2c0004f32de428b.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="683"/></p>
+<blockquote>
+<p><span style="color:#4da8ee;"><em><strong> ps⑥:  1.上面<img alt="A" class="mathcode" src="https://latex.csdn.net/eq?A"/> 矩阵中的 <img alt="0" class="mathcode" src="https://latex.csdn.net/eq?0"/> 矩阵的大小为：<img alt="(N_{u},N_{x})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bu%7D%2CN_%7Bx%7D%29"/> ；</strong></em></span></p>
+<p><span style="color:#4da8ee;"><em><strong>        2. <img alt="A" class="mathcode" src="https://latex.csdn.net/eq?A"/> 矩阵的大小为：<img alt="(N_{x}+N_{u},N_{x}+N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D&amp;plus;N_%7Bu%7D%2CN_%7Bx%7D&amp;plus;N_%7Bu%7D%29"/> ，在第四章中即为<img alt="(5, 5)" class="mathcode" src="https://latex.csdn.net/eq?%285%2C%205%29"/> ；</strong></em></span></p>
+<p><span style="color:#4da8ee;"><em><strong>        3. <img alt="B" class="mathcode" src="https://latex.csdn.net/eq?B"/> 矩阵的大小为：<img alt="(N_{x}+N_{u},N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D&amp;plus;N_%7Bu%7D%2CN_%7Bu%7D%29"/>，在第四章中即为<img alt="(5,2)" class="mathcode" src="https://latex.csdn.net/eq?%285%2C2%29"/> ；</strong></em></span></p>
+<p><span style="color:#4da8ee;"><em><strong>        4.  <img alt="\Delta \tilde{u}(k)" class="mathcode" src="https://latex.csdn.net/eq?%5CDelta%20%5Ctilde%7Bu%7D%28k%29"/>矩阵的大小为：<img alt="(N_{u},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bu%7D%2C1%29"/></strong></em></span> 。</p>
+</blockquote>
+<p> 输出为：<img alt="" height="81" src="https://img-blog.csdnimg.cn/735d2b388daf4e0986e5f71255245bba.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="658"/></p>
+<blockquote>
+<p><span style="color:#4da8ee;"><em><strong>ps⑦: 1. 上面的 <img alt="I_{Nx}" class="mathcode" src="https://latex.csdn.net/eq?I_%7BNx%7D"/> 矩阵的大小并不一定是<img alt="(N_{x},N_{x})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D%2CN_%7Bx%7D%29"/> ，这要看输出状态量的个数，我们将 输出量的个数定义为<img alt="N_{y}" class="mathcode" src="https://latex.csdn.net/eq?N_%7By%7D"/> 。注意：此处的输出量的个数有别于代码中的初始化子函数 中的输出量个 数！<img alt="N_{y}" class="mathcode" src="https://latex.csdn.net/eq?N_%7By%7D"/> 指的是“状态量”中的输出个数，也就是说 <img alt="N_{y}\leq N_{x}" class="mathcode" src="https://latex.csdn.net/eq?N_%7By%7D%5Cleq%20N_%7Bx%7D"/> 。而在第四章中<img alt="N_{y}= N_{x}" class="mathcode" src="https://latex.csdn.net/eq?N_%7By%7D%3D%20N_%7Bx%7D"/> 。</strong></em></span></p>
+<p><span style="color:#4da8ee;"><em><strong>         2. 所以上面 <img alt="C" class="mathcode" src="https://latex.csdn.net/eq?C"/> 矩阵中的 <img alt="0" class="mathcode" src="https://latex.csdn.net/eq?0"/> 矩阵的大小为：<img alt="(N_{y},N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7By%7D%2CN_%7Bu%7D%29"/> ，写成<img alt="(N_{x},N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D%2CN_%7Bu%7D%29"/>  ；那么 <img alt="C" class="mathcode" src="https://latex.csdn.net/eq?C"/></strong></em></span><span style="color:#4da8ee;"><em><strong>矩阵的大小为：<img alt="(N_{y},N_{x}+N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7By%7D%2CN_%7Bx%7D&amp;plus;N_%7Bu%7D%29"/> ；写成<img alt="(N_{x},N_{x}+N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D%2CN_%7Bx%7D&amp;plus;N_%7Bu%7D%29"/> ；<img alt="\eta" class="mathcode" src="https://latex.csdn.net/eq?%5Ceta"/> 矩阵的大小为：<img alt="(N__{y},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N__%7By%7D%2C1%29"/>，写成<img alt="(N_{x},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D%2C1%29"/> 。为了方便书写我们在之后的部分直接用<img alt="N_{x}" class="mathcode" src="https://latex.csdn.net/eq?N_%7Bx%7D"/>代替<img alt="N_{y}" class="mathcode" src="https://latex.csdn.net/eq?N_%7By%7D"/>。如果想详细知道后面部分各个矩阵的具体大小，可参考我第五章的学习内容：————————————</strong></em></span></p>
+</blockquote>
+<h3 id="%E2%91%A5%E8%BF%AD%E4%BB%A3%E6%8E%A8%E5%AF%BC"><em>⑥迭代推导</em></h3>
+<p>控制时域<img alt="N_{c}" class="mathcode" src="https://latex.csdn.net/eq?N_%7Bc%7D"/> ，预测时域<img alt="N_{p}" class="mathcode" src="https://latex.csdn.net/eq?N_%7Bp%7D"/> ，且<img alt="N_{c}\leqslant N_{p}" class="mathcode" src="https://latex.csdn.net/eq?N_%7Bc%7D%5Cleqslant%20N_%7Bp%7D"/> 。</p>
+<p>新的状态量：</p>
+<p><img alt="" height="168" src="https://img-blog.csdnimg.cn/12350b86afff45faba168d87bc620363.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="682"/></p>
+<p>输出：</p>
+<p><img alt="" height="220" src="https://img-blog.csdnimg.cn/04d8bd0e27a44f808ab344a810f46ed1.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="680"/></p>
+<blockquote>
+<p><span style="color:#4da8ee;"><em><strong>ps⑧:因为<img alt="C" class="mathcode" src="https://latex.csdn.net/eq?C"/>矩阵的大小为：<img alt="(N_{x},N_{x}+N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D%2CN_%7Bx%7D&amp;plus;N_%7Bu%7D%29"/> ,<img alt="A" class="mathcode" src="https://latex.csdn.net/eq?A"/>矩阵的大小为：<img alt="(N_{x}+N_{u},N_{x}+N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D&amp;plus;N_%7Bu%7D%2CN_%7Bx%7D&amp;plus;N_%7Bu%7D%29"/>,                <img alt="B" class="mathcode" src="https://latex.csdn.net/eq?B"/>矩阵的大小为：<img alt="(N_{x}+N_{u},N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D&amp;plus;N_%7Bu%7D%2CN_%7Bu%7D%29"/>。所以<img alt="A^{n}" class="mathcode" src="https://latex.csdn.net/eq?A%5E%7Bn%7D"/>矩阵的大小为：<img alt="(N_{x}+N_{u},N_{x}+N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D&amp;plus;N_%7Bu%7D%2CN_%7Bx%7D&amp;plus;N_%7Bu%7D%29"/>，          <img alt="CA^{n}" class="mathcode" src="https://latex.csdn.net/eq?CA%5E%7Bn%7D"/>矩阵 的大小为：<img alt="(N_{x},N_{x}+N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D%2CN_%7Bx%7D&amp;plus;N_%7Bu%7D%29"/>，<img alt="CA^{n}B" class="mathcode" src="https://latex.csdn.net/eq?CA%5E%7Bn%7DB"/>矩阵的大小为：<img alt="(N_{x},N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D%2CN_%7Bu%7D%29"/> 。</strong></em></span></p>
+</blockquote>
+<p>总结规律可得输出方程为：</p>
+<p class="img-center"><img alt="" height="75" src="https://img-blog.csdnimg.cn/10b4f0323b9449c1b1055e4ecd5278f7.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_19,color_FFFFFF,t_70,g_se,x_16" width="640"/></p>
+<p> 其中，<img alt="" height="498" src="https://img-blog.csdnimg.cn/a1b1d5e9ef4c4bd8a81ab0ed000a516c.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="681"/></p>
+<blockquote>
+<p><em><strong><span style="color:#4da8ee;">ps⑨:1.以下带"<img alt="\_cell" class="mathcode" src="https://latex.csdn.net/eq?%5C_cell"/>"结尾的矩阵指的是代码中的元胞；</span></strong></em></p>
+<p><em><strong><span style="color:#4da8ee;">        2.<img alt="\Psi \_cell" class="mathcode" src="https://latex.csdn.net/eq?%5CPsi%20%5C_cell"/> 矩阵大小为：<img alt="(N_{p},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bp%7D%2C1%29"/>，<img alt="\Psi" class="mathcode" src="https://latex.csdn.net/eq?%5CPsi"/>矩阵大小为：<img alt="(N_{p}*N_{x},N_{x}*N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bp%7D*N_%7Bx%7D%2CN_%7Bx%7D*N_%7Bu%7D%29"/>，<img alt="Y\_cell" class="mathcode" src="https://latex.csdn.net/eq?Y%5C_cell"/> 矩阵 的大小为<img alt="(N_{p},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bp%7D%2C1%29"/>，<img alt="Y" class="mathcode" src="https://latex.csdn.net/eq?Y"/> 矩阵的大小为：<img alt="(N_{x}*N_{p},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D*N_%7Bp%7D%2C1%29"/> 。<img alt="\Theta\_cell" class="mathcode" src="https://latex.csdn.net/eq?%5CTheta%5C_cell"/> 矩阵大小为：<img alt="(N_{p},N_{c})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bp%7D%2CN_%7Bc%7D%29"/>，又因<img alt="CA^{n}B" class="mathcode" src="https://latex.csdn.net/eq?CA%5E%7Bn%7DB"/>矩阵的大小为：<img alt="(N_{x},N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D%2CN_%7Bu%7D%29"/> ，所以<img alt="\Theta" class="mathcode" src="https://latex.csdn.net/eq?%5CTheta"/>矩阵的大小为：<img alt="(N_{x}*N_{p},N_{c}*N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D*N_%7Bp%7D%2CN_%7Bc%7D*N_%7Bu%7D%29"/> ,且其中每个<img alt="0" class="mathcode" src="https://latex.csdn.net/eq?0"/>矩阵的大小为：<img alt="(N_{x},N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D%2CN_%7Bu%7D%29"/>，(同<img alt="CA^{n}B" class="mathcode" src="https://latex.csdn.net/eq?CA%5E%7Bn%7DB"/>一样)，<img alt="\Delta U\_cell" class="mathcode" src="https://latex.csdn.net/eq?%5CDelta%20U%5C_cell"/>矩阵的大小为：<img alt="(N_{c},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D%2C1%29"/>，<img alt="\Delta U" class="mathcode" src="https://latex.csdn.net/eq?%5CDelta%20U"/>矩阵的大小为：<img alt="(N_{c}*N_{u},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D*N_%7Bu%7D%2C1%29"/>。</span></strong></em></p>
+</blockquote>
+<h3 id="%E2%91%A6%E7%9B%AE%E6%A0%87%E5%87%BD%E6%95%B0%E4%BC%98%E5%8C%96"><em>⑦目标函数优化</em></h3>
+<p>选择目标函数为：</p>
+<p class="img-center"><img alt="" height="106" src="https://img-blog.csdnimg.cn/398b29b8a46f47bf8935f5dd64c8268d.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="673"/></p>
+<p>并定义系统输出量的参考值为：</p>
+<p class="img-center"><img alt="" height="60" src="https://img-blog.csdnimg.cn/77695d9f002e49f89d1b14b8b30ef7db.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_12,color_FFFFFF,t_70,g_se,x_16" width="401"/></p>
+<p>令<img alt="E=\Psi \xi (k)" class="mathcode" src="https://latex.csdn.net/eq?E%3D%5CPsi%20%5Cxi%20%28k%29"/> ，将式（1.14）代入目标函数式（1.15）中，有： </p>
+<p><img alt="" height="289" src="https://img-blog.csdnimg.cn/6bb164a3ef82417899b6fe123c4b0892.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="681"/></p>
+<p>上面方框中的部分与<img alt="\Delta U" class="mathcode" src="https://latex.csdn.net/eq?%5CDelta%20U"/>无关，属于常量，可不加入优化。</p>
+<blockquote>
+<p><span style="color:#4da8ee;"><em><strong>ps⑩: 上方蓝色方框中的蓝色字体部分的之所以可以这么合并，是因为，<img alt="E" class="mathcode" src="https://latex.csdn.net/eq?E"/>矩阵和<img alt="Y_{ref}" class="mathcode" src="https://latex.csdn.net/eq?Y_%7Bref%7D"/>矩阵是同型矩阵，<img alt="E^{T}QY_{ref}" class="mathcode" src="https://latex.csdn.net/eq?E%5E%7BT%7DQY_%7Bref%7D"/>和<img alt="Y^{T}_{ref}QE" class="mathcode" src="https://latex.csdn.net/eq?Y%5E%7BT%7D_%7Bref%7DQE"/>都是常数，（根据前面推导的<img alt="E" class="mathcode" src="https://latex.csdn.net/eq?E"/>、<img alt="Y" class="mathcode" src="https://latex.csdn.net/eq?Y"/>、<img alt="Q" class="mathcode" src="https://latex.csdn.net/eq?Q"/>矩阵的大小即可推导）因而可以合并。</strong></em></span></p>
+</blockquote>
+<p>故目标函数简化为：</p>
+<p><img alt="" height="117" src="https://img-blog.csdnimg.cn/fef50fe4e26f4beeaf67667bca292e26.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="674"/></p>
+<blockquote>
+<p><span style="color:#4da8ee;"><em><strong> ps⑪:同理，上面第一个方框中的两项也是常数，故可以合并！</strong></em></span></p>
+</blockquote>
+<p>故性能评价函数为：</p>
+<p class="img-center"><img alt="" height="64" src="https://img-blog.csdnimg.cn/015e33bd6f1e47d189d03a582e9f8cc1.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="665"/></p>
+<blockquote>
+<p><em><strong><span style="color:#4da8ee;">ps⑫: 1.以上的推导过程中，因为：<img alt="Y" class="mathcode" src="https://latex.csdn.net/eq?Y"/>矩阵的大小为：<img alt="(N_{x}*N_{p},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D*N_%7Bp%7D%2C1%29"/>， <img alt="Y\_cell" class="mathcode" src="https://latex.csdn.net/eq?Y%5C_cell"/> 矩阵的大小为<img alt="(N_{p},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bp%7D%2C1%29"/> ； <img alt="\Delta U" class="mathcode" src="https://latex.csdn.net/eq?%5CDelta%20U"/>矩阵的大小为：<img alt="(N_{c}*N_{u},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D*N_%7Bu%7D%2C1%29"/>，<img alt="\Delta U\_cell" class="mathcode" src="https://latex.csdn.net/eq?%5CDelta%20U%5C_cell"/>矩阵的大小为：<img alt="(N_{c},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D%2C1%29"/>。所以<img alt="Q\_{cell}" class="mathcode" src="https://latex.csdn.net/eq?Q%5C_%7Bcell%7D"/>元胞的大小为：<img alt="(N_{p},N_{p})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bp%7D%2CN_%7Bp%7D%29"/> ，<img alt="Q" class="mathcode" src="https://latex.csdn.net/eq?Q"/>矩阵大小为：<img alt="(N_{x}* N_{p},N_{x}* N_{p})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D*%20N_%7Bp%7D%2CN_%7Bx%7D*%20N_%7Bp%7D%29"/>；<img alt="R\_{cell}" class="mathcode" src="https://latex.csdn.net/eq?R%5C_%7Bcell%7D"/>元胞的大小为：<img alt="(N_{c},N_{c})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D%2CN_%7Bc%7D%29"/>，<img alt="R" class="mathcode" src="https://latex.csdn.net/eq?R"/>矩阵的大小为<img alt="(N_{c}*N_{u},N_{c}*N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D*N_%7Bu%7D%2CN_%7Bc%7D*N_%7Bu%7D%29"/>。              </span></strong></em></p>
+<p><em><strong><span style="color:#4da8ee;">2.Matlab中二次规划quadprog的标准形式为：</span></strong></em></p>
+<p class="img-center"><img alt="" height="209" src="https://img-blog.csdnimg.cn/24257b732abf40899621c3f0b08f8ca5.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_10,color_FFFFFF,t_70,g_se,x_16" width="344"/></p>
+</blockquote>
+<p>将性能评价函数式(1.16)进行配凑得到：</p>
+<p class="img-center"><img alt="" height="381" src="https://img-blog.csdnimg.cn/5a050f5befdd4d1aba54a9717c27b4b9.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="675"/></p>
+<blockquote>
+<p><span style="color:#4da8ee;"><em><strong>ps⑬: 1.因为<img alt="\Theta\_cell" class="mathcode" src="https://latex.csdn.net/eq?%5CTheta%5C_cell"/>矩阵大小为：<img alt="(N_{p},N_{c})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bp%7D%2CN_%7Bc%7D%29"/>，<img alt="\Theta" class="mathcode" src="https://latex.csdn.net/eq?%5CTheta"/>矩阵的大小为：<img alt="(N_{x}*N_{p},N_{c}*N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D*N_%7Bp%7D%2CN_%7Bc%7D*N_%7Bu%7D%29"/>，<img alt="Q\_{cell}" class="mathcode" src="https://latex.csdn.net/eq?Q%5C_%7Bcell%7D"/>元胞的大小为：<img alt="(N_{p},N_{p})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bp%7D%2CN_%7Bp%7D%29"/>，<img alt="Q" class="mathcode" src="https://latex.csdn.net/eq?Q"/>矩阵大小为：<img alt="(N_{x}* N_{p},N_{x}* N_{p})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bx%7D*%20N_%7Bp%7D%2CN_%7Bx%7D*%20N_%7Bp%7D%29"/>。所以<img alt="\Theta ^{T}Q\Theta" class="mathcode" src="https://latex.csdn.net/eq?%5CTheta%20%5E%7BT%7DQ%5CTheta"/>矩阵的大小为：<img alt="(N_{c}*N_{u},N_{c}*N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D*N_%7Bu%7D%2CN_%7Bc%7D*N_%7Bu%7D%29"/>。<img alt="H" class="mathcode" src="https://latex.csdn.net/eq?H"/>矩阵中右上角的<img alt="0" class="mathcode" src="https://latex.csdn.net/eq?0"/>矩阵大小为：<img alt="(N_{c}*N_{u},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D*N_%7Bu%7D%2C1%29"/>，左下角的<img alt="0" class="mathcode" src="https://latex.csdn.net/eq?0"/>矩阵的大小为：<img alt="(1,N_{c}*N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%281%2CN_%7Bc%7D*N_%7Bu%7D%29"/>。</strong></em></span></p>
+</blockquote>
+<h3 id="%E2%91%A7%E7%BA%A6%E6%9D%9F%E6%9D%A1%E4%BB%B6"><em>⑧约束条件</em></h3>
+<p class="img-center"><img alt="" height="419" src="https://img-blog.csdnimg.cn/199874fa0ed24da7827b1c7caa7913bf.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="669"/></p>
+<blockquote>
+<p><em><span style="color:#4da8ee;"><strong>ps⑭: 1.<img alt="U_{t}\_{cell}" class="mathcode" src="https://latex.csdn.net/eq?U_%7Bt%7D%5C_%7Bcell%7D"/>元胞的大小为：<img alt="(N_{c},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D%2C1%29"/>，<img alt="U_{t}" class="mathcode" src="https://latex.csdn.net/eq?U_%7Bt%7D"/>矩阵的大小为：<img alt="(N_{c}*N_{u},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D*N_%7Bu%7D%2C1%29"/>；<img alt="A_{I}\_{cell}" class="mathcode" src="https://latex.csdn.net/eq?A_%7BI%7D%5C_%7Bcell%7D"/>元胞的大小为：<img alt="(N_{c},N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D%2CN_%7Bu%7D%29"/>，<img alt="A_{I}" class="mathcode" src="https://latex.csdn.net/eq?A_%7BI%7D"/>矩阵的大小为：<img alt="(N_{c}*N_{u},N_{c}*N_{u})" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D*N_%7Bu%7D%2CN_%7Bc%7D*N_%7Bu%7D%29"/>；<img alt="U\_cell" class="mathcode" src="https://latex.csdn.net/eq?U%5C_cell"/>元胞的大小为：<img alt="(N_{c},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D%2C1%29"/>，<img alt="U" class="mathcode" src="https://latex.csdn.net/eq?U"/>矩阵的大小为：<img alt="(N_{c}*N_{u},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D*N_%7Bu%7D%2C1%29"/>。</strong></span></em></p>
+</blockquote>
+<p class="img-center"><img alt="" height="367" src="https://img-blog.csdnimg.cn/48f2ba04e39445f7a7410ec2fe8a7628.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_20,color_FFFFFF,t_70,g_se,x_16" width="675"/></p>
+<blockquote>
+<p><span style="color:#4da8ee;"><em><strong> ps⑮:1.<img alt="U_{min}\_cell" class="mathcode" src="https://latex.csdn.net/eq?U_%7Bmin%7D%5C_cell"/>元胞的大小为：<img alt="(N_{c},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D%2C1%29"/>，<img alt="U_{min}" class="mathcode" src="https://latex.csdn.net/eq?U_%7Bmin%7D"/>矩阵的大小为：<img alt="(N_{c}*N_{u},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D*N_%7Bu%7D%2C1%29"/>; <img alt="U_{max}" class="mathcode" src="https://latex.csdn.net/eq?U_%7Bmax%7D"/>同！</strong></em></span></p>
+</blockquote>
+<p class="img-center"><img alt="" height="122" src="https://img-blog.csdnimg.cn/689ce1eea51649c9a943e7e599dfa9de.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_13,color_FFFFFF,t_70,g_se,x_16" width="455"/></p>
+<blockquote>
+<p><span style="color:#4da8ee;"><em><strong> ps⑯:上面两个<img alt="0\_{cell}" class="mathcode" src="https://latex.csdn.net/eq?0%5C_%7Bcell%7D"/>元胞的大小为：<img alt="(N_{c},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D%2C1%29"/>，<img alt="0" class="mathcode" src="https://latex.csdn.net/eq?0"/>矩阵的大小为：<img alt="(N_{c}*N_{u},1)" class="mathcode" src="https://latex.csdn.net/eq?%28N_%7Bc%7D*N_%7Bu%7D%2C1%29"/>。</strong></em></span> </p>
+</blockquote>
+<h3 id="%E2%91%A8%E4%B8%8A%E4%B8%8B%E9%99%90%E7%BA%A6%E6%9D%9F"><em>⑨上下限约束</em></h3>
+<p class="img-center"><img alt="" height="128" src="https://img-blog.csdnimg.cn/07b051a499044ac794adce5324602ae0.png?x-oss-process=image/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBA5oC757O75a2m5LiN5bqf,size_13,color_FFFFFF,t_70,g_se,x_16" width="436"/></p>
+<blockquote>
+<p><span style="color:#4da8ee;"><em><strong>ps⑰:<img alt="\Delta U_{min}" class="mathcode" src="https://latex.csdn.net/eq?%5CDelta%20U_%7Bmin%7D"/>同<img alt="U_{min}" class="mathcode" src="https://latex.csdn.net/eq?U_%7Bmin%7D"/>~~~</strong></em></span></p>
+</blockquote>
+<p></p>
+<hr/>
+<p></p>
+<h3 id="%E2%91%A9%E5%AD%A6%E4%B9%A0%E9%81%97%E7%95%99%E9%97%AE%E9%A2%98%C2%A0">⑩学习遗留问题 </h3>
+<p> 本文学习时的总结，但由于刚刚入门MPC，还有许多问题不能搞得很清楚，因此留下几个自己的疑惑，希望以后回头再解决（有知道的同学希望不吝赐教鸭~）。</p>
+<p></p>
+</div>
+</div>
+<div id="treeSkill"></div>
+</article>
+<script>
+  $(function() {
+    setTimeout(function () {
+      var mathcodeList = document.querySelectorAll('.htmledit_views img.mathcode');
+      if (mathcodeList.length > 0) {
+        for (let i = 0; i < mathcodeList.length; i++) {
+          if (mathcodeList[i].naturalWidth === 0 || mathcodeList[i].naturalHeight === 0) {
+            var alt = mathcodeList[i].alt;
+            alt = '\\(' + alt + '\\)';
+            var curSpan = $('<span class="img-codecogs"></span>');
+            curSpan.text(alt);
+            $(mathcodeList[i]).before(curSpan);
+            $(mathcodeList[i]).remove();
+          }
+        }
+        MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+      }
+    }, 1000)
+  });
+</script>
+</div></html>
