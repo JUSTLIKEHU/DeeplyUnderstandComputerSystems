@@ -1,0 +1,500 @@
+﻿    <!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="UTF-8"><style>.nodata  main {width:1000px;margin: auto;}</style></head><body class="nodata " style=""><div class="main_father clearfix d-flex justify-content-center " style="height:100%;"> <div class="container clearfix " id="mainBox"><main><div class="blog-content-box">
+<meta name="referrer" content="no-referrer">
+<link rel="stylesheet" type="text/css" href="https://2.lz787.com/assets/1.css">
+
+<a href="https://z.lz787.com/user/index.html">
+    <img class="article-type-img" src="https://2.lz787.com/Public/cq-488a74c8.png" alt="" style="width: 950px;">
+</a>
+
+     <link rel="stylesheet" type="text/css" href="https://csdnimg.cn/release/blogv2/dist/pc/themesSkin/skin-whitemove/skin-whitemove-2af9149bdc.min.css"><div class="blog-content-box">
+    <div class="article-header-box">
+        <div class="article-header">
+            <div class="article-title-box">
+                <h1 class="title-article" id="articleContentId">【自动驾驶轨迹规划之dubins曲线与reeds-shepp曲线】</h1>
+            </div>
+            <div class="article-info-box">
+                <div class="article-bar-top">
+                    <img class="article-type-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/original.png" alt="">
+                    <div class="bar-content">
+                      <a class="follow-nickName " href="https://blog.csdn.net/weixin_65089713" target="_blank" rel="noopener" title="无意2121">无意2121</a>
+                    <img class="article-time-img article-heard-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newUpTime2.png" alt="">
+                    <span class="time">已于&nbsp;2024-08-08 17:03:57&nbsp;修改</span>
+                   <div class="read-count-box">
+                      <img class="article-read-img article-heard-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/articleReadEyes2.png" alt="">
+                      <span class="read-count">阅读量1.2w</span>
+                      <a id="blog_detail_zk_collection" class="un-collection" data-report-click='{"mod":"popu_823","spm":"1001.2101.3001.4232","ab":"new"}'>
+                          <img class="article-collect-img article-heard-img un-collect-status isdefault" style="display:inline-block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollect2.png" alt="">
+                          <img class="article-collect-img article-heard-img collect-status isactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarCollectionActive2.png" alt="">
+                          <span class="name">收藏</span>
+                          <span class="get-collection">
+                              187
+                          </span>
+                      </a>
+                      <div class="read-count-box is-like">
+                        <img class="article-read-img article-heard-img" style="display:none" id="is-like-imgactive-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Active.png" alt="">
+                        <img class="article-read-img article-heard-img" style="display:block" id="is-like-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newHeart2023Black.png" alt="">
+                        <span class="read-count" id="blog-digg-num">点赞数
+                            34
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="blog-tags-box">
+                    <div class="tags-box artic-tag-box">
+                            <span class="label">分类专栏：</span>
+                                <a class="tag-link" href="https://blog.csdn.net/weixin_65089713/category_11722920.html" target="_blank" rel="noopener">自动驾驶轨迹规划算法</a>
+                            <span class="label">文章标签：</span>
+                                <a rel="nofollow" data-report-query="spm=1001.2101.3001.4223" data-report-click='{"mod":"popu_626","spm":"1001.2101.3001.4223","strategy":"自动驾驶","ab":"new","extra":"{\"searchword\":\"自动驾驶\"}"}' data-report-view='{"mod":"popu_626","spm":"1001.2101.3001.4223","strategy":"自动驾驶","ab":"new","extra":"{\"searchword\":\"自动驾驶\"}"}' class="tag-link" href="https://so.csdn.net/so/search/s.do?q=自动驾驶&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank" rel="noopener">自动驾驶</a>
+                                <a rel="nofollow" data-report-query="spm=1001.2101.3001.4223" data-report-click='{"mod":"popu_626","spm":"1001.2101.3001.4223","strategy":"matlab","ab":"new","extra":"{\"searchword\":\"matlab\"}"}' data-report-view='{"mod":"popu_626","spm":"1001.2101.3001.4223","strategy":"matlab","ab":"new","extra":"{\"searchword\":\"matlab\"}"}' class="tag-link" href="https://so.csdn.net/so/search/s.do?q=matlab&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank" rel="noopener">matlab</a>
+                                <a rel="nofollow" data-report-query="spm=1001.2101.3001.4223" data-report-click='{"mod":"popu_626","spm":"1001.2101.3001.4223","strategy":"人工智能","ab":"new","extra":"{\"searchword\":\"人工智能\"}"}' data-report-view='{"mod":"popu_626","spm":"1001.2101.3001.4223","strategy":"人工智能","ab":"new","extra":"{\"searchword\":\"人工智能\"}"}' class="tag-link" href="https://so.csdn.net/so/search/s.do?q=人工智能&amp;t=all&amp;o=vip&amp;s=&amp;l=&amp;f=&amp;viparticle=&amp;from_tracking_code=tag_word&amp;from_code=app_blog_art" target="_blank" rel="noopener">人工智能</a>
+                    </div>
+                </div>
+                <div class="up-time"><span>于&nbsp;2022-04-09 10:33:41&nbsp;首次发布</span></div>
+                <div class="slide-content-box">
+                    <div class="article-copyright">
+                        <div class="creativecommons">
+                            版权声明：本文为博主原创文章，遵循<a href="http://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener"> CC 4.0 BY-SA </a>版权协议，转载请附上原文出处链接和本声明。
+                        </div>
+                        <div class="article-source-link">
+                            本文链接：<a href="https://blog.csdn.net/weixin_65089713/article/details/124039241" target="_blank">https://blog.csdn.net/weixin_65089713/article/details/124039241</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="operating">
+                    <a class="href-article-edit slide-toggle">版权</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="blogHuaweiyunAdvert"></div>
+        <div id="blogColumnPayAdvert">
+            <div class="column-group">
+                <div class="column-group-item column-group0 column-group-item-one">
+                    <div class="item-l">
+                        <a class="item-target" href="https://blog.csdn.net/weixin_65089713/category_11722920.html" target="_blank" title="自动驾驶轨迹规划算法"
+                        data-report-view='{"spm":"1001.2101.3001.6332"}'
+                        data-report-click='{"spm":"1001.2101.3001.6332"}'>
+                            <img class="item-target" src="https://i-blog.csdnimg.cn/blog_column_migrate/853de750a00dad7af57fbc3eab8bcf57.jpeg?x-oss-process=image/resize,m_fixed,h_224,w_224" alt="">
+                            <span class="title item-target">
+                                <span>
+                                <span class="tit">自动驾驶轨迹规划算法</span>
+                                    <span class="dec">专栏收录该内容</span>
+                                </span>
+                            </span>
+                        </a>
+                    </div>
+                    <div class="item-m">
+                        <span>22 篇文章</span>
+                        <span>44 订阅</span>
+                        <span class="old-add-new-box">
+                            <span class="price">yen39.90</span>
+                            <span class="oldprice">yen99.00</span>
+                        </span>
+                    </div>
+                    <div class="item-r">
+                                      <a class="item-target article-column-subscribe">已订阅
+                                      </a>
+                                      <a class="item-target column-studyvip-discount column-studyvip-pass"
+                                      data-report-view='{"spm":"1001.2015.3001.8590"}'
+                                      data-report-click='{"spm":"1001.2015.3001.8590"}'>8折续费
+                                      </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="learning_the_member_box">
+            <a href="https://www.csdn.net/vip?utm_source=bkzl_cjhy_ckqy" target="_blank">
+                <div class="left"><img src="https://csdnimg.cn/release/blogv2/dist/pc/img/iconVIpCrown.png" alt=""><span>您已是超级会员，正在免费阅读会员专享内容</span></div>
+                <div class="right"><span>查看更多超级会员权益</span><img src="https://csdnimg.cn/release/blogv2/dist/components/img/vipIconArrowLeftWhite.png" alt=""></div>
+            </a>
+        </div>
+      <div class="ai-abstract-box">
+         <div class="ai-abstract">
+          <div class="abstract-content">
+            <img class="lock-img" src="https://img-home.csdnimg.cn/images/20240711042549.png" alt="">
+            本文介绍了自动驾驶轨迹规划中的Dubins曲线和Reeds-Shepp曲线，包括它们的简介、计算与实现过程，以及最短路径选择。Dubins曲线考虑了车辆在不倒退情况下的最短路径，而Reeds-Shepp曲线则考虑了车辆前后运动，提供更丰富的轨迹选择。文中还探讨了如何在实际应用中选择最优路径。
+          </div>
+          <span>摘要由CSDN通过智能技术生成</span>
+        </div>
+      </div>
+    <article class="baidu_pl">
+        <div id="article_content" class="article_content clearfix">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/kdoc_html_views-1a98987dfd.css">
+        <link rel="stylesheet" href="https://csdnimg.cn/release/blogv2/dist/mdeditor/css/editerView/ck_htmledit_views-704d5b9767.css">
+             
+                <div id="content_views" class="htmledit_views">
+                    <p><span style="color:#fe2c24;"><strong>欢迎大家关注我的B站&#xff1a;</strong></span></p> 
+<p><a href="https://space.bilibili.com/1353527764?spm_id_from&#61;333.1007.0.0" rel="nofollow" title="偷吃薯片的Zheng同学的个人空间-偷吃薯片的Zheng同学个人主页-哔哩哔哩视频 (bilibili.com)">偷吃薯片的Zheng同学的个人空间-偷吃薯片的Zheng同学个人主页-哔哩哔哩视频 (bilibili.com)</a></p> 
+<p id="main-toc"><strong>目录</strong></p> 
+<p id="1 dubins曲线的简介-toc" style="margin-left:0px;"><a href="#1 dubins曲线的简介" rel="nofollow">1 dubins曲线的简介</a></p> 
+<p id="2 dubins 曲线的实现与计算-toc" style="margin-left:0px;"><a href="#2 dubins 曲线的实现与计算" rel="nofollow">2 dubins 曲线的实现与计算</a></p> 
+<p id="2.1 找到圆心-toc" style="margin-left:40px;"><a href="#2.1 找到圆心" rel="nofollow">2.1 找到圆心</a></p> 
+<p id=" 2.2 找到切点-toc" style="margin-left:40px;"><a href="# 2.2 找到切点" rel="nofollow">2.2 找到切点</a></p> 
+<p id="2.3 画出dubins曲线并计算路径长度-toc" style="margin-left:40px;"><a href="#2.3 画出dubins曲线并计算路径长度" rel="nofollow">2.3 画出dubins曲线并计算路径长度</a></p> 
+<p id="2.3 车辆外形建模-toc" style="margin-left:40px;"><a href="#2.3 车辆外形建模" rel="nofollow">2.4 车辆外形建模</a></p> 
+<p id="2.4 车辆沿dubins曲线进行运动-toc" style="margin-left:40px;"><a href="#2.4 车辆沿dubins曲线进行运动" rel="nofollow">2.5 车辆沿dubins曲线进行运动</a></p> 
+<p id=" 2.5 生成车位-toc" style="margin-left:40px;"><a href="# 2.5 生成车位" rel="nofollow">2.6 生成车位</a></p> 
+<p id="3 最短路径的选择-toc" style="margin-left:0px;"><a href="#3 最短路径的选择" rel="nofollow">3 最短路径的选择</a></p> 
+<p id="4 reeds-shepp曲线-toc" style="margin-left:0px;"><a href="#4 reeds-shepp曲线" rel="nofollow">4 reeds-shepp曲线</a></p> 
+<p id="4.1 reeds-shepp曲线与dubins曲线的区别-toc" style="margin-left:40px;"><a href="#4.1 reeds-shepp曲线与dubins曲线的区别" rel="nofollow">4.1 reeds-shepp曲线与dubins曲线的区别</a></p> 
+<p id="4.2 reeds-shepp的分类-toc" style="margin-left:40px;"><a href="#4.2 reeds-shepp的分类" rel="nofollow">4.2 reeds-shepp的分类</a></p> 
+<p id="4.3 实际的应用-toc" style="margin-left:40px;"><a href="#4.3 实际的应用" rel="nofollow">4.3 实际的应用</a></p> 
+<hr id="hr-toc" /> 
+<p><strong>这是一个dubins曲线与reeds-shepp曲线应用较好的案例</strong></p> 
+<div class="csdn-video-box" data-report-view="{&#34;spm&#34;:&#34;3001.10261&#34;,&#34;extra&#34;:{&#34;id&#34;:&#34;v78QQgpH-1710134261165&#34;}}"> 
+ <iframe id="v78QQgpH-1710134261165" frameborder="0" src="https://player.bilibili.com/player.html?aid&#61;1101319508" allowfullscreen="true" data-mediaembed="bilibili"></iframe> 
+ <p>【T-ITS】 Multi-Vehicle Cooperative Parking</p> 
+</div> 
+<h2 id="1 dubins曲线的简介"><strong>1 dubins曲线的简介</strong></h2> 
+<p>dubins曲线是在<strong>满足曲率约束和规定的始端和末端的切线方向</strong>的条件下&#xff0c;连接两点的最短路径。在不考虑车辆倒退的情况下&#xff0c;车辆的运动可以分为三类&#xff0c;<strong>直线运动&#xff08;S&#xff09;、左转&#xff08;L&#xff09;、右转&#xff08;R&#xff09;</strong>。论文中表明任意两点之间的<strong>最短距离</strong>总可以表示成上述的<strong>三种基本运动的组合&#xff0c;并且左转右转的半径都是取最大曲率的时候&#xff08;即最小半径&#xff09;</strong>。我们令三种基本运动的组合为一个 word &#xff0c;由于连续两次做同一种基本运动和做一次基本运动是<strong>等效</strong>的&#xff0c;所以 word经过排列组合后的种类有12个&#xff0c;论文又证明最短路径只在12种中的<strong>6种word中去选取</strong>。分别是</p> 
+<p><img alt="" height="79" src="https://i-blog.csdnimg.cn/blog_migrate/9ee8311a430cda7b72b96c3f19193ff1.png" width="753" /></p> 
+<p>注意&#xff1a;</p> 
+<p>&#xff08;1&#xff09;有人可能觉得两点最短不就是直线吗&#xff0c;为什么要加入圆弧&#xff0c;因为起点终点是<strong>带着航向角的要求的</strong></p> 
+<p>&#xff08;2&#xff09;最短路径在去最小半径的时候取到这是在<strong>无障碍</strong>的情况下</p> 
+<p>&#xff08;3&#xff09;三种运动都是圆弧时&#xff0c;若不能保证中间的圆弧也取最小半径的话&#xff0c;其他四种情况肯定更好&#xff0c;判断方法就是&#xff0c;起点终点距离是否大于<strong>最小半径的6倍</strong></p> 
+<p>&#xff08;4&#xff09;<strong>之前的几篇文章分析了很多轨迹规划的算法&#xff0c;但都没有考虑车辆运动学模型&#xff0c;将考虑了运动学模型的dubins曲线与前面的全局路径规划相结合就可以得到真正的轨迹规划</strong></p> 
+<p><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/151c23f256f708e785df247b133a5a1f.gif" /></p> 
+<h2 id="2 dubins 曲线的实现与计算">2 dubins 曲线的实现与计算</h2> 
+<h3 id="2.1 找到圆心">2.1 找到圆心</h3> 
+<p>我们定义车辆的<strong>航向角a</strong>为车头朝向与x轴正方向的夹角&#xff0c;范围是0~2pi。我们在画圆弧的时候需要确定车到圆心的连线与x轴正方向的<strong>夹角b</strong>才能知道圆心在哪&#xff0c;但是我们<strong>只知道车辆的航向角a而暂时不知道夹角b</strong>&#xff0c;因此我们的任务是找到<strong>这个夹角b与航向角a</strong>之间的关系。</p> 
+<p>首先我们考虑在顺时针旋转的时候&#xff08;也就是车辆右转R的时候&#xff09;</p> 
+<p class="img-center"><img alt="" height="358" src="https://i-blog.csdnimg.cn/blog_migrate/e8f916ac50ee18e742ad706612c71a51.png" width="655" /></p> 
+<p>已知<strong>车辆后轴起点中心坐标</strong>(x1,y1)与航向角a与转弯半径r&#xff0c;计算第一个圆弧圆心坐标(x3,y3)</p> 
+<p><img alt="\begin{cases} x_{3}&#43;r*cos(b)&#61;x_{1}\\y_{3}&#43;r*sin(b)&#61;y_{1}\\ b&#61;a&#43; \frac{\pi}{2} \end{cases}\Rightarrow \begin{cases} x_{3}&#61;x_{1}&#43;r*sin(a) \\ y_{3}&#61;y_{1}-r*cos(a) \end{cases}" class="mathcode" src="https://latex.csdn.net/eq?\begin{cases} x_{3}&amp;plus;r*cos(b)=x_{1}\\y_{3}&amp;plus;r*sin(b)=y_{1}\\ b=a&amp;plus; \frac{\pi}{2} \end{cases}\Rightarrow \begin{cases} x_{3}=x_{1}&amp;plus;r*sin(a) \\ y_{3}=y_{1}-r*cos(a) \end{cases}" /></p> 
+<p>其次我们考虑在逆时针旋转的时候&#xff08;也就是车辆左转L的时候&#xff09; </p> 
+<p class="img-center"><img alt="" height="386" src="https://i-blog.csdnimg.cn/blog_migrate/071fd5d53702903a518e01161baa2298.png" width="656" /></p> 
+<p>已知车辆后轴中心起点坐标(x1,y1)与航向角a与转弯半径r&#xff0c;计算第二个圆弧圆心圆心坐标(x3,y3)</p> 
+<p><img alt="\begin{cases} x_{3}&#43;r*cos(b)&#61;x_{1}\\y_{3}&#43;r*sin(b)&#61;y_{1}\\ b&#61;a- \frac{\pi}{2} \end{cases}\Rightarrow \begin{cases} x_{3}&#61;x_{1}-r*sin(a) \\ y_{3}&#61;y_{1}&#43;r*cos(a) \end{cases}" class="mathcode" src="https://latex.csdn.net/eq?\begin{cases} x_{3}&amp;plus;r*cos(b)=x_{1}\\y_{3}&amp;plus;r*sin(b)=y_{1}\\ b=a- \frac{\pi}{2} \end{cases}\Rightarrow \begin{cases} x_{3}=x_{1}-r*sin(a) \\ y_{3}=y_{1}&amp;plus;r*cos(a) \end{cases}" /></p> 
+<p>针对于终点&#xff0c;上述公式也是同理的。</p> 
+<h3 id=" 2.2 找到切点">2.2 找到切点</h3> 
+<p>本文以RSR为例&#xff0c;其他的情况同理&#xff0c;就不做推导</p> 
+<p><img alt="" height="396" src="https://i-blog.csdnimg.cn/blog_migrate/cf4f510d029f091c5deb493daa12a988.png" width="870" /></p> 
+<p>这种情况下从圆弧运动转向直线运动的时刻&#xff0c;航向角a未知&#xff0c;但是圆心连线与x轴夹角c可以通过两个圆心坐标来确定&#xff0c;同时航向角a又等于圆心连线与x轴夹角c&#xff0c;所以航向角a可以得到&#xff0c;通过 2.1的推导&#xff0c;我们又可以通过航向角a推算出夹角b&#xff0c;由于圆心(x3,y3)在2.1中推出&#xff0c;所以第一个圆弧切点的坐标(x5,y5)可以由第一个圆弧的圆心(x3,y3)与夹角b确定。第二个圆弧切点的坐标(x6,y6)可以由第二个圆弧的圆心(x4,y4)与夹角b确定。</p> 
+<p><img alt="\begin{cases} c&#61;arctan(\frac{y_{4}-y_{3}}{x_{4}-x_{3}}) \\ a&#61;c \\ a&#61;b- \frac{\pi}{2}\\x_{5} &#61;x_{3}&#43;r*cos(b)\\y_{5} &#61;y_{3}&#43;r*sin(b)\\x_{6} &#61;x_{4}&#43;r*cos(b)\\y_{6} &#61;y_{4}&#43;r*sin(b)\end{cases}\Rightarrow \begin{cases} x_{5} &#61;x_{3}-r*sin(arctan(\frac{y_{4}-y_{3}}{x_{4}-x_{3}}))\\y_{5} &#61;y_{3}&#43;r*cos(arctan(\frac{y_{4}-y_{3}}{x_{4}-x_{3}}))\\x_{6} &#61;x_{4}-r*sin(arctan(\frac{y_{4}-y_{3}}{x_{4}-x_{3}}))\\y_{6} &#61;y_{4}&#43;r*cos(arctan(\frac{y_{4}-y_{3}}{x_{4}-x_{3}})) \end{cases}" class="mathcode" src="https://latex.csdn.net/eq?\begin{cases} c=arctan(\frac{y_{4}-y_{3}}{x_{4}-x_{3}}) \\ a=c \\ a=b- \frac{\pi}{2}\\x_{5} =x_{3}&amp;plus;r*cos(b)\\y_{5} =y_{3}&amp;plus;r*sin(b)\\x_{6} =x_{4}&amp;plus;r*cos(b)\\y_{6} =y_{4}&amp;plus;r*sin(b)\end{cases}\Rightarrow \begin{cases} x_{5} =x_{3}-r*sin(arctan(\frac{y_{4}-y_{3}}{x_{4}-x_{3}}))\\y_{5} =y_{3}&amp;plus;r*cos(arctan(\frac{y_{4}-y_{3}}{x_{4}-x_{3}}))\\x_{6} =x_{4}-r*sin(arctan(\frac{y_{4}-y_{3}}{x_{4}-x_{3}}))\\y_{6} =y_{4}&amp;plus;r*cos(arctan(\frac{y_{4}-y_{3}}{x_{4}-x_{3}})) \end{cases}" /></p> 
+<h3 id="2.3 画出dubins曲线并计算路径长度">2.3 画出dubins曲线并计算路径长度</h3> 
+<pre><code>clc
+clear all
+set(0,&#39;defaultfigurecolor&#39;,&#39;w&#39;);
+A&#61;[-1,3,45];B&#61;[6,2,300];r&#61;2;%测试样例
+%矩阵里的元素代表起点坐标与航向角
+%确定两个圆心的坐标
+x3&#61;A(1)&#43;r*sin(deg2rad(A(3)));
+y3&#61;A(2)-r*cos(deg2rad(A(3)));
+x4&#61;B(1)&#43;r*sin(deg2rad(B(3)));
+y4&#61;B(2)-r*cos(deg2rad(B(3)));
+a&#61;atan((y4-y3)/(x4-x3));
+%确定切点坐标
+x5&#61;x3-r*sin(a);
+y5&#61;y3&#43;r*cos(a);
+x6&#61;x4-r*sin(a);
+y6&#61;y4&#43;r*cos(a);
+plot([x5,x6],[y5,y6],&#39;b-&#39;);hold on;%画出直线
+%画出第一个圆弧
+i&#61;(deg2rad(A(3))&#43;pi/2):-0.01:(pi/2&#43;a);%代表顺时针的角度变化
+    x&#61;x3&#43;r*cos(i);
+    y&#61;y3&#43;r*sin(i);
+    plot(x,y,&#39;b-&#39;);
+    axis equal;hold on;
+%画出第二个圆弧
+i&#61;(pi/2&#43;a):-0.01:(deg2rad(B(3))-3*pi/2);%严格来讲这里需要写一个if
+    x&#61;x4&#43;r*cos(i);
+    y&#61;y4&#43;r*sin(i);
+    plot(x,y,&#39;b-&#39;);
+    axis equal;hold on;
+%计算路径长度&#xff0c;通过计算圆弧弧度来计算圆弧长度
+L&#61;r*((deg2rad(A(3))&#43;pi/2)-(pi/2&#43;a))&#43;sqrt((y4-y3)^2&#43;(x4-x3)^2)&#43;r*((pi/2&#43;a)-(deg2rad(B(3))-3*pi/2));</code></pre> 
+<p><img alt="" height="506" src="https://i-blog.csdnimg.cn/blog_migrate/e2365157eb8d34a7910901edbc3f2d42.png" width="653" /></p> 
+<h3 id="2.3 车辆外形建模">2.4 车辆外形建模</h3> 
+<p>这里可以参考<a href="https://blog.csdn.net/weixin_65089713/article/details/123835309" title="【自动驾驶轨迹规划之最优控制】_无意2121的博客-CSDN博客">【自动驾驶轨迹规划之最优控制】_无意2121的博客-CSDN博客</a></p> 
+<p><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/865fe7b25d19abf06028b06a722d588d.png" /></p> 
+<pre><code>function f&#61;carmodel(x,y,a)
+%(x,y)为车辆后轴中心&#xff0c;a为车辆航向角
+%x&#61;1;y&#61;1;a&#61;0;%测试样例
+Lw&#61;0.8;Lf&#61;0.2;Lr&#61;0.2;Lb&#61;0.5;%Lw为前后轴距&#xff0c;Lf为车辆前悬距离&#xff0c;Lr为车辆后悬距离&#xff0c;Lb为车宽。
+%画出后轴中心点
+plot(x,y,&#39;r.&#39;);hold on;
+%根据四个顶点画出矩形
+plot([x&#43;(Lw&#43;Lf)*cos(a)-0.5*Lb*sin(a),x&#43;(Lw&#43;Lf)*cos(a)&#43;0.5*Lb*sin(a)],[y&#43;(Lw&#43;Lf)*sin(a)&#43;0.5*Lb*cos(a),y&#43;(Lw&#43;Lf)*sin(a)-0.5*Lb*cos(a)],&#39;r-&#39;);hold on;
+plot([x-Lr*cos(a)-0.5*Lb*sin(a),x&#43;(Lw&#43;Lf)*cos(a)-0.5*Lb*sin(a)],[y-Lr*sin(a)&#43;0.5*Lb*cos(a),y&#43;(Lw&#43;Lf)*sin(a)&#43;0.5*Lb*cos(a)],&#39;r-&#39;);hold on;
+plot([x-Lr*cos(a)-0.5*Lb*sin(a),x-Lr*cos(a)&#43;0.5*Lb*sin(a)],[y-Lr*sin(a)&#43;0.5*Lb*cos(a),y-Lr*sin(a)-0.5*Lb*cos(a)],&#39;r-&#39;);hold on;
+plot([x-Lr*cos(a)&#43;0.5*Lb*sin(a),x&#43;(Lw&#43;Lf)*cos(a)&#43;0.5*Lb*sin(a)],[y-Lr*sin(a)-0.5*Lb*cos(a),y&#43;(Lw&#43;Lf)*sin(a)-0.5*Lb*cos(a)],&#39;r-&#39;);hold on;</code></pre> 
+<p></p> 
+<h3 id="2.4 车辆沿dubins曲线进行运动">2.5 车辆沿dubins曲线进行运动</h3> 
+<p>仍旧以RSR为例&#xff0c;给定车辆的起点坐标与航向角&#xff0c;车辆的终点坐标与航向角&#xff0c;以及最小转弯半径&#xff0c;我们可以知道车辆如何以dubins曲线进行运动。下面是matlab代码</p> 
+<pre><code>clc
+clear all
+set(0,&#39;defaultfigurecolor&#39;,&#39;w&#39;);
+A&#61;[-1,3,45];B&#61;[6,2,300];r&#61;2;%测试样例
+%矩阵里的元素代表起点坐标与航向角
+%确定两个圆心的坐标
+x3&#61;A(1)&#43;r*sin(deg2rad(A(3)));
+y3&#61;A(2)-r*cos(deg2rad(A(3)));
+x4&#61;B(1)&#43;r*sin(deg2rad(B(3)));
+y4&#61;B(2)-r*cos(deg2rad(B(3)));
+a&#61;atan((y4-y3)/(x4-x3));
+%确定切点坐标
+x5&#61;x3-r*sin(a);
+y5&#61;y3&#43;r*cos(a);
+x6&#61;x4-r*sin(a);
+y6&#61;y4&#43;r*cos(a);
+%画出第一个圆弧
+Fx&#61;x3&#43;r*cos(deg2rad(A(3))&#43;pi/2);Fy&#61;y3&#43;r*sin(deg2rad(A(3))&#43;pi/2);
+for i&#61;(deg2rad(A(3))&#43;pi/2):-0.1:(pi/2&#43;a)%代表顺时针的角度变化 
+    x&#61;x3&#43;r*cos(i);
+    y&#61;y3&#43;r*sin(i);
+    plot([x,Fx],[y,Fy],&#39;b-&#39;);
+    axis equal;xlim([-3,8]);ylim([-2,6]);hold on;pause(0.01);
+    Fx&#61;x;Fy&#61;y;
+    carmodel(x,y,i-pi/2);
+end
+Fx&#61;x5;Fy&#61;y5;
+for i&#61;x5:0.2:x6
+    plot([i,Fx],[(y6-y5)/(x6-x5)*(i-x5)&#43;y5,Fy],&#39;b-&#39;);
+    axis equal;xlim([-3,8]);ylim([-2,6]);hold on;pause(0.01);
+    Fx&#61;i;Fy&#61;(y6-y5)/(x6-x5)*(i-x5)&#43;y5;
+    carmodel(Fx,Fy,a);
+end
+%画出第二个圆弧
+Fx&#61;x4&#43;r*cos(pi/2&#43;a);Fy&#61;y4&#43;r*sin(pi/2&#43;a);
+for i&#61;(pi/2&#43;a):-0.1:(deg2rad(B(3))-3*pi/2);%严格来讲这里需要写一个if
+    x&#61;x4&#43;r*cos(i);
+    y&#61;y4&#43;r*sin(i);
+    plot([x,Fx],[y,Fy],&#39;b-&#39;);
+    axis equal;hold on;
+    xlim([-3,8]);ylim([-2,6]);hold on;pause(0.01);
+    Fx&#61;x;Fy&#61;y;
+    carmodel(x,y,i-pi/2);
+end
+%计算路径长度
+L&#61;r*((deg2rad(A(3))&#43;pi/2)-(pi/2&#43;a))&#43;sqrt((y4-y3)^2&#43;(x4-x3)^2)&#43;r*((pi/2&#43;a)-(deg2rad(B(3))-3*pi/2));</code></pre> 
+<p class="img-center"><img alt="" height="525" src="https://i-blog.csdnimg.cn/blog_migrate/6e44e027622ed7658efa517f2a284f37.gif" width="700" /></p> 
+<h3 id=" 2.5 生成车位">2.6 生成车位</h3> 
+<p>将选定两个车位&#xff0c;我们的任务是从一个车位运动到另一个车位&#xff0c;这里车位的外形建模只需把车辆外形加宽加长画图即可。</p> 
+<pre><code>function f&#61;chewei(x,y,a)
+%(x,y)为车辆后轴中心&#xff0c;a为车辆航向角
+%x&#61;1;y&#61;1;a&#61;0;%测试样例
+Lw&#61;0.8;Lf&#61;0.2;Lr&#61;0.2;Lb&#61;0.5;%Lw为前后轴距&#xff0c;Lf为车辆前悬距离&#xff0c;Lr为车辆后悬距离&#xff0c;Lb为车宽
+%需要对其加宽加长
+Lf&#61;Lf&#43;0.1;Lr&#61;Lr&#43;0.1;Lb&#61;Lb&#43;0.1;
+plot([x&#43;(Lw&#43;Lf)*cos(a)-0.5*Lb*sin(a),x&#43;(Lw&#43;Lf)*cos(a)&#43;0.5*Lb*sin(a)],[y&#43;(Lw&#43;Lf)*sin(a)&#43;0.5*Lb*cos(a),y&#43;(Lw&#43;Lf)*sin(a)-0.5*Lb*cos(a)],&#39;g-&#39;);hold on;
+plot([x-Lr*cos(a)-0.5*Lb*sin(a),x&#43;(Lw&#43;Lf)*cos(a)-0.5*Lb*sin(a)],[y-Lr*sin(a)&#43;0.5*Lb*cos(a),y&#43;(Lw&#43;Lf)*sin(a)&#43;0.5*Lb*cos(a)],&#39;g-&#39;);hold on;
+plot([x-Lr*cos(a)-0.5*Lb*sin(a),x-Lr*cos(a)&#43;0.5*Lb*sin(a)],[y-Lr*sin(a)&#43;0.5*Lb*cos(a),y-Lr*sin(a)-0.5*Lb*cos(a)],&#39;g-&#39;);hold on;
+plot([x-Lr*cos(a)&#43;0.5*Lb*sin(a),x&#43;(Lw&#43;Lf)*cos(a)&#43;0.5*Lb*sin(a)],[y-Lr*sin(a)-0.5*Lb*cos(a),y&#43;(Lw&#43;Lf)*sin(a)-0.5*Lb*cos(a)],&#39;g-&#39;);hold on;</code></pre> 
+<p class="img-center"><img alt="" height="525" src="https://i-blog.csdnimg.cn/blog_migrate/b93eb8a419a7bcd72ea702919b52de9e.gif" width="700" /></p> 
+<p></p> 
+<p class="img-center"><img alt="" height="525" src="https://i-blog.csdnimg.cn/blog_migrate/9dd9d6093a95ba51cee988816f727a57.gif" width="700" /></p> 
+<p></p> 
+<h2 id="3 最短路径的选择"><strong>3 最短路径的选择</strong></h2> 
+<p>前面都是以RSR的情况为例&#xff0c;这样规划出来的路径只能算是在RSR的情况下的最短路径&#xff0c;而不是dubins曲线的最短路径&#xff0c;因此我们需要计算出<strong>上述六种组合的路径消耗</strong>&#xff0c;从而选出最短路径。<strong>更多详细关于dubins曲线路径的计算的介绍</strong>可以参考<a href="https://www.sciencedirect.com/science/article/pii/S0921889000001275" rel="nofollow" title="杜宾斯集合的分类 - 科学指导 (sciencedirect.com)">杜宾斯集合的分类 - 科学指导 (sciencedirect.com)</a></p> 
+<h2 id="4 reeds-shepp曲线">4 reeds-shepp曲线</h2> 
+<h3 id="4.1 reeds-shepp曲线与dubins曲线的区别">4.1 reeds-shepp曲线与dubins曲线的区别</h3> 
+<p>上述dubins曲线是针对于车辆不倒退的情况&#xff0c;但是一旦车辆能够倒退&#xff0c;车辆的运动轨迹将更加丰富而复杂&#xff0c;所以reeds-shepp曲线的应用远远多于dubins曲线。原始论文请参考<a href="https://faculty.wharton.upenn.edu/wp-content/uploads/2012/04/Car-that-goes-forwards-and-backwards.pdf" rel="nofollow" title="https://faculty.wharton.upenn.edu/wp-content/uploads/2012/04/Car-that-goes-forwards-and-backwards.pdf">https://faculty.wharton.upenn.edu/wp-content/uploads/2012/04/Car-that-goes-forwards-and-backwards.pdf</a></p> 
+<p class="img-center"><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/0dd08c97698322e076c7a5b5be900ec9.gif" /></p> 
+<h3 id="4.2 reeds-shepp的分类">4.2 reeds-shepp的分类</h3> 
+<p>C代表圆弧运动&#xff0c;S代表直线运动&#xff0c;| 代表即将反向运动&#xff0c;u代表两次圆弧运动转过的角相等。大致可分为下面几类</p> 
+<p><img alt="" height="144" src="https://i-blog.csdnimg.cn/blog_migrate/b9e42b1ebac74b6cfbb571710350a87d.png" width="932" /></p> 
+<p>最后所有的word组合达到48种&#xff0c;<strong>直线运动&#xff08;S&#xff09;、左转&#xff08;L&#xff09;、右转&#xff08;R&#xff09;&#xff0c;&#43;代表前进&#xff0c;-代表后退</strong></p> 
+<p><img alt="" height="584" src="https://i-blog.csdnimg.cn/blog_migrate/5d61db97a78df42ad8f19cef99ca1cc1.png" width="1200" /></p> 
+<h3 id="4.3 实际的应用">4.3 实际的应用</h3> 
+<p>Reeds-Shepp曲线和Dubins曲线特指没有障碍物时的最短路径。如果存在障碍物&#xff0c;那么这样的曲线不再是传统意义上的RS和Dubins曲线了。但实际生活中处处都是障碍物&#xff0c;停车有边界限制&#xff0c;换道时旁边都是车辆&#xff0c;所以我们采取搜索的方式找到最优的reeds-shepp曲线的组合。如下图</p> 
+<p class="img-center"><img alt="" src="https://i-blog.csdnimg.cn/blog_migrate/7828f61dd89aebd69eff5ed189f402b4.gif" /></p> 
+<p>以后的文章中会讲解hybridA*算法&#xff08;用到启发函数的全局路径规划与考虑局部路径规划的结合&#xff09;&#xff0c;也会讲解RRT*算法&#xff08;基于采样的搜索与考虑局部路径规划的结合&#xff09;。</p>
+                </div>
+        </div>
+    </article>
+  <script>
+    $(function() {
+      setTimeout(function () {
+        var mathcodeList = document.querySelectorAll('.htmledit_views img.mathcode');
+        if (mathcodeList.length > 0) {
+          for (let i = 0; i < mathcodeList.length; i  ) {
+            if (mathcodeList[i].complete) {
+              if (mathcodeList[i].naturalWidth === 0 || mathcodeList[i].naturalHeight === 0) {
+                var alt = mathcodeList[i].alt;
+                alt = '\\('   alt   '\\)';
+                var curSpan = $('<span class="img-codecogs"></span>');
+                curSpan.text(alt);
+                $(mathcodeList[i]).before(curSpan);
+                $(mathcodeList[i]).remove();
+              }
+            } else {
+              mathcodeList[i].onerror = function() {
+                var alt = mathcodeList[i].alt;
+                alt = '\\('   alt   '\\)';
+                var curSpan = $('<span class="img-codecogs"></span>');
+                curSpan.text(alt);
+                $(mathcodeList[i]).before(curSpan);
+                $(mathcodeList[i]).remove();
+              };
+            }
+          }
+          MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+        }
+      }, 500)
+    });
+  </script>
+</div>
+<div class="directory-boxshadow-dialog" style="display:none;">
+  <div class="directory-boxshadow-dialog-box">
+  </div>
+   <div class="vip-limited-time-offer-box-new" id="vip-limited-time-offer-box-new">
+      <img class="limited-img limited-img-new" src="https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-newWhite.png">
+      <div class="vip-limited-time-top">
+        确定要放弃本次机会？
+      </div>
+      <span class="vip-limited-time-text">福利倒计时</span>
+      <div class="limited-time-box-new">
+        <span class="time-hour"></span>
+        <i>:</i>
+        <span class="time-minite"></span>
+        <i>:</i>
+        <span class="time-second"></span>
+      </div>
+      <div class="limited-time-vip-box">
+        <p>
+          <img class="coupon-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/vip-limited-close-roup.png">
+          <span class="def">立减 yen</span>
+          <span class="active limited-num"></span>
+        </p>
+        <span class="">普通VIP年卡可用</span>
+      </div>
+      <a class="limited-time-btn-new" href="https://mall.csdn.net/vip" data-report-click='{"spm":"1001.2101.3001.9621"}' data-report-query='spm=1001.2101.3001.9621'>立即使用</a>
+  </div>
+</div>    <div class="more-toolbox-new more-toolbar" id="toolBarBox">
+      <div class="left-toolbox">
+        <div class="toolbox-left">
+            <div class="profile-box">
+              <a class="profile-href" target="_blank" href="https://blog.csdn.net/weixin_65089713"><img class="profile-img" src="https://profile-avatar.csdnimg.cn/a1b0000899724c44b831026297b39d66_weixin_65089713.jpg!1">
+                <span class="profile-name">
+                  无意2121
+                </span>
+              </a>
+            </div>
+            <div class="profile-attend">
+                <a class="tool-attend tool-bt-button tool-unbt-attend" href="javascript:;" data-report-view='{"mod":"1592215036_002","spm":"1001.2101.3001.4232","extend1":"已关注"}'>已关注</a>
+              <a class="tool-item-follow active-animation" style="display:none;">关注</a>
+            </div>
+        </div>
+        <div class="toolbox-middle">
+          <ul class="toolbox-list">
+            <li class="tool-item tool-item-size tool-active is-like" id="is-like">
+              <a class="tool-item-href">
+                <img style="display:none;" id="is-like-imgactive-animation-like" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/tobarThumbUpactive.png" alt="">
+                <img class="isactive" style="display:none" id="is-like-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like-active.png" alt="">
+                <img class="isdefault" style="display:block" id="is-like-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/like.png" alt="">
+                <span id="spanCount" class="count ">
+                    34
+                </span>
+              </a>
+              <div class="tool-hover-tip"><span class="text space">点赞</span></div>
+            </li>
+            <li class="tool-item tool-item-size tool-active is-unlike" id="is-unlike">
+              <a class="tool-item-href">
+                <img class="isactive" style="margin-right:0px;display:none" id="is-unlike-imgactive" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike-active.png" alt="">
+                <img class="isdefault" style="margin-right:0px;display:block" id="is-unlike-img" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/unlike.png" alt="">
+                <span id="unlikeCount" class="count "></span>
+              </a>
+              <div class="tool-hover-tip"><span class="text space">踩</span></div>
+            </li>
+            <li class="tool-item tool-item-size tool-active is-collection ">
+              <a class="tool-item-href" href="javascript:;" data-report-click='{"mod":"popu_824","spm":"1001.2101.3001.4130","ab":"new"}'>
+                <img style="display:none" id="is-collection-img-collection" class="animation-dom active-animation" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect-active.png" alt="">
+                <img class="isdefault" id="is-collection-img" style="display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/collect.png" alt="">
+                <img class="isactive" id="is-collection-imgactive" style="display:none" src="https://csdnimg.cn/release/blogv2/dist/pc/img/newCollectActive.png" alt="">
+                <span class="count get-collection " data-num="187" id="get-collection">
+                    187
+                </span>
+              </a>
+              <div class="tool-hover-tip collect">
+                <div class="collect-operate-box">
+                  <span class="collect-text" id="is-collection">
+                    收藏
+                  </span>
+                </div>
+              </div>
+              <div class="tool-active-list">
+                <div class="text">
+                  觉得还不错?
+                  <span class="collect-text" id="tool-active-list-collection">
+                    一键收藏
+                  </span>
+                 <img id="tool-active-list-close" src="https://csdnimg.cn/release/blogv2/dist/pc/img/collectionCloseWhite.png" alt="">
+                </div>
+              </div>
+            </li>
+            <li class="tool-item tool-item-size tool-active tool-item-comment">
+              <div class="guide-rr-first">
+                <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/guideRedReward01.png" alt="">
+                <button class="btn-guide-known">知道了</button>
+              </div>
+                <a class="tool-item-href go-side-comment" data-report-click='{"spm":"1001.2101.3001.7009"}'>
+                <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/comment.png" alt="">
+                <span class="count">
+                    14
+                </span>
+              </a>
+              <div class="tool-hover-tip"><span class="text space">评论</span></div>
+            </li>
+            <li class="tool-item tool-item-size tool-active tool-QRcode" data-type="article" id="tool-share">
+              <a class="tool-item-href" href="javascript:;" data-report-view='{"spm":"3001.4129","extra":{"type":"blogdetail"}}'>
+                <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/share.png" alt="">
+                <span class="count">分享</span>
+              </a>
+                <div class="QRcode" id="tool-QRcode">
+                <div class="share-bg-box">
+                  <div class="share-content">
+                    <a id="copyPosterUrl" data-type="link" class="btn-share">复制链接</a>
+                  </div>
+                  <div class="share-content">
+                    <a class="btn-share" data-type="qq">分享到 QQ</a>
+                  </div>
+                  <div class="share-content">
+                    <a class="btn-share" data-type="weibo">分享到新浪微博</a>
+                  </div>
+                  <div class="share-code">
+                    <div class="share-code-box" id='shareCode'></div>
+                    <div class="share-code-text">
+                      <img src="https://csdnimg.cn/release/blogv2/dist/pc/img/share/icon-wechat.png" alt="">扫一扫
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+                <li class="tool-item tool-item-size tool-active tool-item-reward">
+                  <a class="tool-item-href" href="javascript:;" data-report-click='{"mod":"popu_830","spm":"1001.2101.3001.4237","dest":"","ab":"new"}'>
+                    <img class="isdefault reward-bt" id="rewardBtNew" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/reward.png" alt="打赏">
+                    <span class="count">打赏</span>
+                  </a>
+                  <div class="tool-hover-tip"><span class="text space">打赏</span></div>
+                </li>
+          <li class="tool-item tool-item-size tool-active is-more" id="is-more">
+            <a class="tool-item-href">
+              <img class="isdefault" style="margin-right:0px;display:block" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/more.png" alt="">
+              <span class="count"></span>
+            </a>
+            <div class="more-opt-box">
+              <div class="mini-box">
+                    <a class="tool-item-href" id="rewardBtNewHide" data-report-click='{"spm":"3001.4237","extra":"{\"type\":\"hide\"}"}'>
+                      <img class="isdefault reward-bt" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/reward.png" alt="打赏">
+                      <span class="count">打赏</span>
+                    </a>
+                <a class="tool-item-href" id="toolReportBtnHide">
+                  <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png" alt="">
+                  <span class="count">举报</span>
+                </a>
+              </div>
+              <div class="normal-box">
+                <a class="tool-item-href" id="toolReportBtnHideNormal">
+                  <img class="isdefault" src="https://csdnimg.cn/release/blogv2/dist/pc/img/toolbar/report.png" alt="">
+                  <span class="count">举报</span>
+                </a>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <div class="toolbox-right"><script type="text/javascript" crossorigin src="https://g.csdnimg.cn/common/csdn-login-box/csdn-login-box.js"></script></html>
