@@ -1,3 +1,20 @@
 {
-  
+  "clangd.arguments": [
+    "-j=12",
+    "--log=verbose",
+    "--background-index",
+    "--compile-commands-dir=${workspaceFolder}/build",
+    "--query-driver=/usr/bin/*",
+    // "--query-driver=/opt/fsl-auto/32.0/sysroots/x86_64-fslbsp-linux/usr/bin/aarch64-fsl-linux/aarch64-fsl-linux-g++,/opt/fsl-auto/32.0/sysroots/x86_64-fslbsp-linux/usr/bin/aarch64-fsl-linux/aarch64-fsl-linux-gcc",
+    "--completion-style=detailed",
+    "--function-arg-placeholders",
+    // 补充头文件的形式
+    "--header-insertion=iwyu",
+    // pch优化的位置
+    "--pch-storage=memory",
+    "--pretty"
+  ]
+  "C_Cpp.intelliSenseEngine" : "disabled",
+  "clangd.path": "/usr/bin/clangd",
+  "clangd.enabled": true
 }

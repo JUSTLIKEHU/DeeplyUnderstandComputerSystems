@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.22)
+
+project(algorithm)
+
+add_executable(dijstra dijstra.cpp)
+
+add_executable(a_star a_star.cpp)
+
+install(TARGETS dijstra DESTINATION ${OUTPUT_ROOT}/${PROJECT_NAME}/bin)
+install(TARGETS a_star DESTINATION ${OUTPUT_ROOT}/${PROJECT_NAME}/bin)
