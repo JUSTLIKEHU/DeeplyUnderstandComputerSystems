@@ -386,7 +386,26 @@ void AStar::search() {
         neighbor->h = calculateHeuristic(*neighbor);
         neighbor->f = neighbor->g + neighbor->h;
         neighbor->parent = current;
-        if (!neighbor->is_in_open_list) {
+        
+        // 如果节点已在open_list中，需要重建优先队列以更新排序
+        if (neighbor->is_in_open_list) {
+          // 保存当前open_list中除了neighbor以外的所有节点
+          std::vector<Node*> temp;
+          while (!open_list_.empty()) {
+            Node* node = open_list_.top();
+            open_list_.pop();
+            if (node != neighbor) {
+              temp.push_back(node);
+            }
+          }
+          // 重建优先队列
+          for (Node* node : temp) {
+            open_list_.push(node);
+          }
+          // 将更新后的neighbor重新加入队列
+          open_list_.push(neighbor);
+        } else {
+          // 如果是新节点，直接加入队列
           open_list_.push(neighbor);
           neighbor->is_in_open_list = true;
         }

@@ -75,6 +75,7 @@ class AStar {
   std::vector<std::vector<Node>> grid_;
   Node* start_;
   Node* end_;
+  std::vector<Node*> open_list_heap_;
   std::priority_queue<Node*, std::vector<Node*>, CompareNode> open_list_;
   std::unordered_set<Node*, NodeHash, NodeEqual> closed_list_;
 };
